@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 export const routes: Routes = [
     //create a custom route:
     {
-        path: 'home', //when you go to /home, HomeComponent will be loaded
+        path: '', //when you go to /home, HomeComponent will be loaded
         component: HomeComponent //import the HomeComponent from the home component we created
     },
     //can also have paths for pageNotFound, also have default paths, also link to different modules

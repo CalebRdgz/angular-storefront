@@ -5,8 +5,10 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './home.component.html', //specifying that using html file as a template
-  styleUrl: './home.component.scss' // using scss file as the url
+  styleUrl: './home.component.scss', // using scss file as the url
 })
 export class HomeComponent {
-
+  //can declare any number of methods that you can invoke
+  //create a service (used by multiple components)
+  
 }
