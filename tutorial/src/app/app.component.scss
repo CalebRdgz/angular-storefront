@@ -1,0 +1,8 @@
+.wrapper {
+  height: auto; //wrapper will grow automatically with the rest of the styles
+  padding: 20px;
+  width: 100%;
+
+  flex-grow: 1; //wrapper will take up the rest of the space between header/footer
+  box-sizing: border-box; //fixes the overflow of the page
+}

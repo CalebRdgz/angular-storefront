@@ -1,3 +1,14 @@
-<!-- if you visit /home or /profile, each route can output a diff component -->
-<!-- router outlet itself will take care of rendering the corresponding component -->
-<router-outlet></router-outlet>
+<!-- Header Component -->
+<app-header></app-header>
+
+<!-- Wrapper -->
+<div class="wrapper">
+  <!-- router-outlet is our body -->
+  <router-outlet></router-outlet>
+</div>
+
+
+<!-- /Wrapper -->
+
+<!-- Footer Component -->
+<app-footer></app-footer>
