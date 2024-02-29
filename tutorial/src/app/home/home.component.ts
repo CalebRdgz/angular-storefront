@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { ProductsService } from '../services/products.service';
-import { Products } from '../../types';
+import { Product, Products } from '../../types';
+import { ProductComponent } from '../components/product/product.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home', //name of the component tag <app-home></app-home>
   standalone: true,
-  imports: [],
+  imports: [ProductComponent, CommonModule], //CommonModule - contains functionality by Angular
   templateUrl: './home.component.html', //specifying that using html file as a template
   styleUrl: './home.component.scss', // using scss file as the url
 })
@@ -18,6 +20,12 @@ export class HomeComponent {
     private productsService: ProductsService //uses API service to comm with backend (CRUD requests)
   ) {}
 
+  products: Product[] = []; //product is an array of Product initialized as empty array
+
+  onProductOutput(product: Product) {
+    console.log(product, 'Output');
+  }
+
   //this function called when we initialize our component:
   ngOnInit() {
     //invoking getProducts function from Products service, subscribing to the Observable in getProducts
@@ -28,7 +36,8 @@ export class HomeComponent {
       .subscribe((products: Products) => {
         //products is now of type Products interface
         //once the subscription goes through, display the result of that subscription (products)
-        console.log(products.items); //display our products without extra info
+        // console.log(products.items); //display our products without extra info
+        this.products = products.items; //this. references the products we just created above this .subscribe function^
       });
   }
 }
