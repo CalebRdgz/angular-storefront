@@ -68,22 +68,30 @@ app.get("/clothes", (req, res) => {
   }
 */
 app.post("/clothes", (req, res) => {
+  //inputing a body to this post request by deconstructing that body
+  //to extract the image, name, price, and rating:
   const { image, name, price, rating } = req.body;
 
+  //using the fs dependency to read the db.json file with our products
+  //getting a response in the form of an error or data
   fs.readFile("db.json", "utf8", (err, data) => {
+    //if there's an error, we're sending a response of 500 (internal server error) back to the client
     if (err) {
       console.log(err);
       res.status(500).send("Internal Server Error");
       return;
     }
-
+    //if no errors, using JSON.parse to parse through the products in db.json. jsonData IS the list of products
     const jsonData = JSON.parse(data);
 
+    //find the maximum id: (highest id = 16, add a new item = 16 + 1 = 17)
     const maxId = jsonData.items.reduce(
       (max, item) => Math.max(max, item.id),
       0
     );
 
+    //creating a new item by creating a new Id, based on the length of the items + 1 (zero-intexed items NOT +1):
+    // creating a new item = 16 items + 1 new item = 17 ids
     const newItem = {
       id: maxId + 1,
       image,
@@ -91,16 +99,19 @@ app.post("/clothes", (req, res) => {
       price,
       rating,
     };
-
+    //pushing that new item into our jsonData (db.json) array:
     jsonData.items.push(newItem);
 
+    //instead of readFile^, we're writing with writeFile:
+    //taking our db.json file, sreingifying that as jsonData, getting a response in the form of an error:
     fs.writeFile("db.json", JSON.stringify(jsonData), (err) => {
+      //if there's an error, display the error status 500(internal server error)
       if (err) {
         console.log(err);
         res.status(500).send("Internal Server Error");
         return;
       }
-
+      //if no error, return positive response(201) and returning that new item(redundant):
       res.status(201).json(newItem);
     });
   });
@@ -116,10 +127,14 @@ app.post("/clothes", (req, res) => {
     "rating": 4
   }
 */
+// localhost:3000/clothes/1 - PUT
 app.put("/clothes/:id", (req, res) => {
+  //the id is being extracted using parseInt as an integer from the parameter above^:
   const id = parseInt(req.params.id);
+  //extracting the body like before:
   const { image, name, price, rating } = req.body;
 
+  //reading the file like before:
   fs.readFile("db.json", "utf8", (err, data) => {
     if (err) {
       console.log(err);
@@ -129,13 +144,16 @@ app.put("/clothes/:id", (req, res) => {
 
     const jsonData = JSON.parse(data);
 
+    //trying to obtain the index of that element based on the id (id in database may not be sequential):
     const index = jsonData.items.findIndex((item) => item.id === id);
 
+    //if index not found, returning a 404(Not Found) status:
     if (index === -1) {
       res.status(404).send("Not Found");
       return;
     }
 
+    //if no error, taking our product at that specific index, and setting it to our new object:
     jsonData.items[index] = {
       id,
       image,
@@ -144,6 +162,7 @@ app.put("/clothes/:id", (req, res) => {
       rating,
     };
 
+    //use fs.writeFile to write our changes back into our file: 
     fs.writeFile("db.json", JSON.stringify(jsonData), (err) => {
       if (err) {
         console.log(err);
@@ -151,16 +170,19 @@ app.put("/clothes/:id", (req, res) => {
         return;
       }
 
+      //sending positive(200) response back like before:
       res.status(200).json(jsonData.items[index]);
     });
   });
 });
 
 // DELETE route - Allows to delete an item
-// example: localhost:3000/clothes/1
+// example: localhost:3000/clothes/1 - DELETE
 app.delete("/clothes/:id", (req, res) => {
+  //extracting an id from the endpoint:
   const id = parseInt(req.params.id);
 
+  //reading our db.json file, responding with an error or data:
   fs.readFile("db.json", "utf8", (err, data) => {
     if (err) {
       console.log(err);
@@ -168,8 +190,10 @@ app.delete("/clothes/:id", (req, res) => {
       return;
     }
 
+    //parsing our data into JSON:
     const jsonData = JSON.parse(data);
 
+    //getting the index of the current product
     const index = jsonData.items.findIndex((item) => item.id === id);
 
     if (index === -1) {
@@ -177,8 +201,10 @@ app.delete("/clothes/:id", (req, res) => {
       return;
     }
 
+    //splicing the current product from the list of products in db.json file
     jsonData.items.splice(index, 1);
 
+    //writing the changes into our file:
     fs.writeFile("db.json", JSON.stringify(jsonData), (err) => {
       if (err) {
         console.log(err);

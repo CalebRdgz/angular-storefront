@@ -1,4 +1,5 @@
-<div class="column">
+<div class="column gap-1">
+  <!-- Products Section -->
   <div class="row wrap gap-1 space-between">
     <!-- loop through our products, for each product, extract the product in question, then provide that product as an input to our product component: -->
     <app-product
@@ -7,4 +8,13 @@
       (productOutput)="onProductOutput($event)"
     ></app-product>
   </div>
+
+  <!-- Paginator -->
+  <p-paginator
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    (onPageChange)="onPageChange($event)"
+  >
+  </p-paginator>
 </div>
