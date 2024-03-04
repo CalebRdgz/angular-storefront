@@ -4,11 +4,12 @@ import { DialogModule } from 'primeng/dialog';
 import { Product } from '../../../types';
 import { FormsModule } from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-popup',
   standalone: true,
-  imports: [DialogModule, CommonModule, FormsModule, RatingModule], //CommonModule Exports all the basic Angular directives and pipes(NgIf, NgForOf, DecimalPipe, etc.)
+  imports: [DialogModule, CommonModule, FormsModule, RatingModule, ButtonModule], //CommonModule Exports all the basic Angular directives and pipes(NgIf, NgForOf, DecimalPipe, etc.)
   templateUrl: './edit-popup.component.html',
   styleUrl: './edit-popup.component.scss',
 })
