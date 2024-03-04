@@ -4,11 +4,19 @@ import { Product, Products } from '../../types';
 import { ProductComponent } from '../components/product/product.component';
 import { CommonModule } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
+import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-home', //name of the component tag <app-home></app-home>
   standalone: true,
-  imports: [ProductComponent, CommonModule, PaginatorModule], //CommonModule - contains functionality by Angular
+  imports: [
+    ProductComponent,
+    CommonModule,
+    PaginatorModule,
+    EditPopupComponent,
+    ButtonModule
+  ], //CommonModule - contains functionality by Angular
   templateUrl: './home.component.html', //specifying that using html file as a template
   styleUrl: './home.component.scss', // using scss file as the url
 })
@@ -25,6 +33,51 @@ export class HomeComponent {
 
   totalRecords: number = 0;
   rows: number = 5;
+
+  //create the display variable used in the Home Component HTML:
+  displayEditPopup: boolean = false;
+  displayAddPopup: boolean = false;
+
+  //two new functions to toggle these two popups^
+  toggleEditPopup(product: Product) {
+    this.selectedProduct = product; //setting the selectedProduct to a specific product (in the params)^
+    this.displayEditPopup = true;
+  }
+
+  //function for delete
+  toggleDeletePopup(product: Product) {
+
+  }
+
+  //same thing with the toggleAddPopup(), just dont need to modify the selectedProduct:
+  toggleAddPopup() {
+    this.displayAddPopup = true;
+  }
+
+  //initialize the selectedProduct as a blank product to take its id:
+  selectedProduct: Product = {
+    id: 0,
+    name: '',
+    image: '',
+    price: '',
+    rating: 0,
+  };
+
+  //invoke the editProduct method created below to call the backend endpoint, then close the popup
+  onConfirmEdit(product: Product) {
+    //if id doesnt exist, do return out of this method:
+    if (!this.selectedProduct.id) {
+      return;
+    }
+    //if id does exist, continue on with this code:
+    this.editProduct(product, this.selectedProduct.id);
+    this.displayEditPopup = false;
+  }
+  //invoke the addProduct method created below to call the backend endpoint, then close the popup
+  onConfirmAdd(product: Product) {
+    this.addProduct(product);
+    this.displayAddPopup = false;
+  }
 
   onProductOutput(product: Product) {
     console.log(product, 'Output');
@@ -98,7 +151,7 @@ export class HomeComponent {
   //add a specific product:
   addProduct(product: Product) {
     this.productsService
-      .addProduct(`http://localhost:3000/clothes/${id}`, product)
+      .addProduct(`http://localhost:3000/clothes/`, product)
       .subscribe({
         next: (data) => {
           console.log(data);

@@ -1,11 +1,22 @@
 <div class="column gap-1">
+
+  <!-- Add Product Button -->
+  <button
+    type="button"
+    pButton
+    icon="pi pi-plus"
+    (click)="toggleAddPopup()"
+    label="Add Product"
+  ></button>
+
   <!-- Products Section -->
   <div class="row wrap gap-1 space-between">
     <!-- loop through our products, for each product, extract the product in question, then provide that product as an input to our product component: -->
     <app-product
       *ngFor="let product of products"
       [product]="product"
-      (productOutput)="onProductOutput($event)"
+      (edit)="toggleEditPopup($event)"
+      (delete)="toggleDeletePopup($event)"
     ></app-product>
   </div>
 
@@ -18,3 +29,19 @@
   >
   </p-paginator>
 </div>
+
+<!-- Edit Product popup -->
+<!-- onConfirmEdit function takes in the event form the (confirm) event emitter -->
+<app-edit-popup
+  [product]="selectedProduct"
+  [display]="displayEditPopup"
+  (confirm)="onConfirmEdit($event)"
+  header="Edit Product"
+></app-edit-popup>
+
+<!-- Add Product popup -->
+<app-edit-popup
+  [display]="displayAddPopup"
+  (confirm)="onConfirmAdd($event)"
+  header="Add Product"
+></app-edit-popup>

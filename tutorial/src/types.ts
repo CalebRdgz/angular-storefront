@@ -37,6 +37,7 @@ export interface Products {
 }
 //interface for the types of each product inside of the list of Products:
 export interface Product {
+    id?: number;
     price: string;
     name: string;
     image: string;
