@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ProductsService } from '../services/products.service';
 import { Product, Products } from '../../types';
 import { ProductComponent } from '../components/product/product.component';
 import { CommonModule } from '@angular/common';
-import { PaginatorModule } from 'primeng/paginator';
+import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
 import { ButtonModule } from 'primeng/button';
 
@@ -29,6 +29,9 @@ export class HomeComponent {
     private productsService: ProductsService //uses API service to comm with backend (CRUD requests)
   ) {}
 
+  //create a @ViewChild for our paginator (undefined so we don't have to initialize this):
+  @ViewChild('paginator') paginator: Paginator | undefined;
+
   products: Product[] = []; //product is an array of Product initialized as empty array
 
   totalRecords: number = 0;
@@ -46,7 +49,10 @@ export class HomeComponent {
 
   //function for delete
   toggleDeletePopup(product: Product) {
-
+    if (!product.id) {
+      return;
+    }
+    this.deleteProduct(product.id);
   }
 
   //same thing with the toggleAddPopup(), just dont need to modify the selectedProduct:
@@ -89,6 +95,11 @@ export class HomeComponent {
     this.fetchProducts(event.page, event.rows);
   }
 
+  resetPaginator() {
+    //check if the paginator exists, if it does, set changePage to 0:
+    this.paginator?.changePage(0);
+  }
+
   //takes in a custom page
   fetchProducts(page: number, perPage: number) {
     this.productsService //calling the productsService which calls the getProducts function, which returns an Observable
@@ -121,6 +132,8 @@ export class HomeComponent {
             console.log(data);
             //when this editProduct is successful, call fetchProducts again with the default parameters:
             this.fetchProducts(0, this.rows);
+            //reset the paginator on edit, delete, or add a new product:
+            this.resetPaginator();
           },
           //one object dealing with an error if the request fails(400-500 error codes):
           error: (error) => {
@@ -140,6 +153,8 @@ export class HomeComponent {
           console.log(data);
           //when this deleteProduct is successful, call fetchProducts again with the default parameters:
           this.fetchProducts(0, this.rows);
+          //reset the paginator on edit, delete, or add a new product:
+          this.resetPaginator();
         },
         //if there's an error, log the erorr:
         error: (error) => {
@@ -151,12 +166,14 @@ export class HomeComponent {
   //add a specific product:
   addProduct(product: Product) {
     this.productsService
-      .addProduct(`http://localhost:3000/clothes/`, product)
+      .addProduct(`http://localhost:3000/clothes`, product)
       .subscribe({
         next: (data) => {
           console.log(data);
           //when this addProduct is successful, call fetchProducts again with the default parameters:
           this.fetchProducts(0, this.rows);
+          //reset the paginator on edit, delete, or add a new product:
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
