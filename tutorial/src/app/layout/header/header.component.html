@@ -1,3 +1,10 @@
-<header class="wrapper row full-center">
+<header class="wrapper column full-center">
   <img src="assets/images/oc-logo.svg" alt="Logo image" class="logo" />
+
+  <div class="row gap-1">
+    <!-- routerLink = allows the router to navigate to a different section of the website -->
+    <!-- routerLinkActive = checks if the routerLink is active, then applies this active class to this entire a tag element -->
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="/about-us" routerLinkActive="active">About</a>
+  </div>
 </header>

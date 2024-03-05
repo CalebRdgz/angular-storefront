@@ -1,9 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 //routes array is just a constant declared in this file:
 //only need to change the contents of this routes array:
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    component: AboutUsComponent //AboutUsComponent is now our primary route
+  },
+];
 
 //@NgModule decorator allows us to import, export, declare things for this module:
 @NgModule({

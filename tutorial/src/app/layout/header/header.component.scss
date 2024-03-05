@@ -7,7 +7,17 @@
   padding: 20px 10px; //padding of 20px on left, 10px on right
   box-sizing: border-box; //prevents overflow in the header
 
-  .logo {
+  a { //style for all a tags:
+    text-decoration: none;
+    font-weight: 300;
+    color: black;
+
+    &.active { //when the .active class exists in an a tag, make it bold:
+      font-weight: 900;
+    }
+  }
+
+  .logo { 
     height: 100%;
     object-fit: contain;
   }
